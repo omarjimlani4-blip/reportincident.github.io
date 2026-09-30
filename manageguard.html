@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Guards</title>
+<style>
+body {
+    margin:0;
+    font-family:"Segoe UI",sans-serif;
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    color:#fff;
+    overflow-x:hidden;
+}
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+header{
+    text-align:center;
+    margin-bottom:20px;
+}
+header h1{
+    font-size:1.6rem;
+    animation: glow 2s infinite alternate;
+}
+@keyframes glow{
+    from {text-shadow:0 0 10px #fff;}
+    to {text-shadow:0 0 25px #00eaff;}
+}
+.card{
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+    animation: slideUp 0.7s ease;
+}
+@keyframes slideUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+input,select,button{
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-size:1rem;
+}
+button{
+    cursor:pointer;
+    transition:0.3s;
+}
+button:hover{
+    transform:scale(1.05);
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius:12px;
+    overflow:hidden;
+}
+th,td{
+    padding:12px;
+    text-align:left;
+}
+tr:hover{background: rgba(255,255,255,0.1);}
+.delete-btn{background:#d32f2f; color:#fff; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;}
+
+.back {
+    float: right;
+    margin-top: -40px;
+    margin-right: 180px;
+    background: #00eaff;
+}
+
+.back:hover {
+    background: #0b5f67;
+    color: white;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Manage Guards</h1>
+    <button class="back" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Add / Edit Guard</h2>
+        <input id="gName" placeholder="Guard Name"><br><br>
+        <input id="gContact" placeholder="Contact Number"><br><br>
+        <input id="gPost" placeholder="Designation / Post"><br><br>
+        <select id="gShift">
+            <option value="">Select Shift</option>
+            <option value="Day Shift">Day Shift</option>
+            <option value="Night Shift">Night Shift</option>
+        </select><br><br>
+        <select id="gStatus">
+            <option value="">Select Status</option>
+            <option value="On Duty">On Duty</option>
+            <option value="Off Duty">Off Duty</option>
+        </select><br><br>
+        <button onclick="saveGuard()">Save Guard</button>
+    </div>
+
+    <div class="card">
+        <h2>Guards List</h2>
+        <input type="text" id="searchInput" placeholder="Search guard..." onkeyup="renderTable()"><br><br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Designation / Post</th>
+                    <th>Shift</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="guardTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+const gName = document.getElementById("gName");
+const gContact = document.getElementById("gContact");
+const gPost = document.getElementById("gPost");
+const gShift = document.getElementById("gShift");
+const gStatus = document.getElementById("gStatus");
+
+let editID = null;
+let guards = JSON.parse(localStorage.getItem("guardsData")) || [];
+
+function saveGuards(){
+    localStorage.setItem("guardsData", JSON.stringify(guards));
+}
+
+// Render table
+function renderTable(){
+    const searchText = document.getElementById("searchInput").value.toLowerCase();
+    const table = document.getElementById("guardTable");
+    table.innerHTML = "";
+    guards.forEach((g,index)=>{
+        if(g.name.toLowerCase().includes(searchText) || g.contact.toLowerCase().includes(searchText) || g.post.toLowerCase().includes(searchText)){
+            table.innerHTML += `
+                <tr>
+                    <td>${g.name}</td>
+                    <td>${g.contact}</td>
+                    <td>${g.post}</td>
+                    <td>${g.shift}</td>
+                    <td>${g.status}</td>
+                    <td>
+                        <button onclick="editGuard(${index})">Edit</button>
+                        <button class="delete-btn" onclick="deleteGuard(${index})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        }
+    });
+}
+
+// Add or update guard
+function saveGuard(){
+    if(!gName.value || !gContact.value || !gShift.value || !gStatus.value || !gPost.value){
+        alert("Please fill all fields");
+        return;
+    }
+
+    if(editID === null){
+        guards.push({
+            name: gName.value,
+            contact: gContact.value,
+            post: gPost.value,
+            shift: gShift.value,
+            status: gStatus.value
+        });
+    } else {
+        guards[editID].name = gName.value;
+        guards[editID].contact = gContact.value;
+        guards[editID].post = gPost.value;
+        guards[editID].shift = gShift.value;
+        guards[editID].status = gStatus.value;
+        editID = null;
+    }
+
+    saveGuards();
+    renderTable();
+    gName.value = "";
+    gContact.value = "";
+    gPost.value = "";
+    gShift.value = "";
+    gStatus.value = "";
+}
+
+// Edit guard
+function editGuard(index){
+    editID = index;
+    gName.value = guards[index].name;
+    gContact.value = guards[index].contact;
+    gPost.value = guards[index].post;
+    gShift.value = guards[index].shift;
+    gStatus.value = guards[index].status;
+}
+
+// Delete guard
+function deleteGuard(index){
+    if(confirm("Are you sure you want to delete this guard?")){
+        guards.splice(index,1);
+        saveGuards();
+        renderTable();
+    }
+}
+
+// Initial render
+renderTable();
+</script>
+
+</body>
+</html>

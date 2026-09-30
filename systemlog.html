@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Logs</title>
+<style>
+body {
+    margin:0;
+    font-family:"Segoe UI",sans-serif;
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    color:#fff;
+    overflow-x:hidden;
+}
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+header{
+    text-align:center;
+    margin-bottom:20px;
+}
+header h1{
+    font-size:1.6rem;
+    animation: glow 2s infinite alternate;
+}
+@keyframes glow{
+    from {text-shadow:0 0 10px #fff;}
+    to {text-shadow:0 0 25px #00eaff;}
+}
+.card{
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+    animation: slideUp 0.7s ease;
+}
+@keyframes slideUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius:12px;
+    overflow:hidden;
+}
+th,td{
+    padding:12px;
+    text-align:left;
+}
+tr:hover{background: rgba(255,255,255,0.1);}
+.delete-btn{
+    background:#d32f2f;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.back {
+    float: right;
+    margin-top: -40px;
+    margin-right: 190px;
+    background: #00eaff;
+    padding: 8px;
+    border-radius: 15px;
+}
+
+.back:hover {
+    background: #0b5f67;
+    color: white;
+}
+
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>System Logs</h1>
+    <button class="back" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Activity Logs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Module</th>
+                    <th>User / Guard</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="logTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+// Load logs from localStorage
+let logs = JSON.parse(localStorage.getItem("systemLogs")) || [];
+
+// Example: auto-log guard check-in/out and shifts
+// (You can push logs from Guard Dashboard, Manage Guards, Shifts, Incidents, Alerts)
+
+function addLog(module, user, action, details){
+    const now = new Date().toLocaleString();
+    logs.push({timestamp: now, module, user, action, details});
+    localStorage.setItem("systemLogs", JSON.stringify(logs));
+    renderTable();
+}
+
+// For demo: simulate some logs if empty
+if(logs.length === 0){
+    addLog("Guard Dashboard", "Guard A", "Check In", "Checked in at Gate 1");
+    addLog("Shift Scheduling", "Admin", "Assign Shift", "Guard B assigned Night Shift at Gate 2");
+    addLog("Incident Reports", "Guard C", "Submit Incident", "Suspicious person near Gate 3");
+    addLog("Alert Center", "Guard A", "Send Alert", "Distress alert at Gate 1");
+}
+
+// Render table
+function renderTable(){
+    const table = document.getElementById("logTable");
+    table.innerHTML = "";
+    logs.forEach((l,index)=>{
+        table.innerHTML += `
+            <tr>
+                <td>${l.timestamp}</td>
+                <td>${l.module}</td>
+                <td>${l.user}</td>
+                <td>${l.action}</td>
+                <td>${l.details}</td>
+                <td><button class="delete-btn" onclick="deleteLog(${index})">Delete</button></td>
+            </tr>
+        `;
+    });
+}
+
+// Delete log
+function deleteLog(index){
+    if(confirm("Are you sure to delete this log?")){
+        logs.splice(index,1);
+        localStorage.setItem("systemLogs", JSON.stringify(logs));
+        renderTable();
+    }
+}
+
+// Initial render
+renderTable();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incident Location</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+body{
+    margin:0;
+
+    font-family:"Segoe UI",sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #e0f2fe,
+            #eef2ff
+        );
+
+    color:#334155;
+
+    overflow-x:hidden;
+
+    min-height:100vh;
+
+    position:relative;
+}
+
+
+/* Animated background */
+
+body::before,
+body::after{
+    content:"";
+
+    position:fixed;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+body::before{
+    width:360px;
+    height:360px;
+
+    background:rgba(37,99,235,.12);
+
+    top:-130px;
+    left:-110px;
+
+    animation:
+        floatOne 8s ease-in-out infinite;
+}
+
+body::after{
+    width:420px;
+    height:420px;
+
+    background:rgba(14,165,233,.10);
+
+    bottom:-170px;
+    right:-130px;
+
+    animation:
+        floatTwo 10s ease-in-out infinite;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:20px;
+
+    animation:
+        pageEntrance .8s ease-out;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    text-align:center;
+
+    margin-bottom:20px;
+
+    animation:
+        headerEntrance .8s ease-out;
+}
+
+header h1{
+
+    color:#173b6c;
+
+    font-size:1.6rem;
+
+    animation:
+        glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+    from{
+        text-shadow:
+            0 0 5px rgba(37,99,235,.15);
+    }
+
+    to{
+        text-shadow:
+            0 0 20px rgba(37,99,235,.35);
+    }
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+
+    background:
+        rgba(255,255,255,.90);
+
+    backdrop-filter:
+        blur(14px);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 15px 40px rgba(30,64,175,.12),
+        0 4px 12px rgba(0,0,0,.05);
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    animation:
+        slideUp .7s ease forwards;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.card:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(30,64,175,.16);
+}
+
+.card h2{
+
+    color:#173b6c;
+
+    margin-top:0;
+
+    margin-bottom:15px;
+}
+
+
+/* =========================
+   CARD ANIMATION
+========================= */
+
+@keyframes slideUp{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:
+        rgba(255,255,255,.75);
+
+    backdrop-filter:
+        blur(10px);
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    margin-top:10px;
+
+    box-shadow:
+        0 8px 25px rgba(30,64,175,.08);
+
+    animation:
+        tableEntrance .8s ease-out;
+}
+
+
+/* Table Header */
+
+th{
+
+    padding:14px;
+
+    text-align:left;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173b6c,
+            #1e5aa8
+        );
+
+    color:#fff;
+
+    font-size:.9rem;
+}
+
+
+/* Table Cells */
+
+td{
+
+    padding:13px;
+
+    text-align:left;
+
+    color:#334155;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background:
+        rgba(255,255,255,.72);
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+
+/* Row Hover */
+
+tr:hover td{
+
+    background:
+        #eff6ff;
+}
+
+
+/* =========================
+   MAP LINK
+========================= */
+
+.map-link{
+
+    display:inline-block;
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    padding:6px 10px;
+
+    border-radius:7px;
+
+    background:#eff6ff;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease,
+        box-shadow .25s ease;
+}
+
+.map-link:hover{
+
+    color:#fff;
+
+    background:#2563eb;
+
+    transform:
+        translateY(-2px)
+        scale(1.03);
+
+    box-shadow:
+        0 6px 15px rgba(37,99,235,.20);
+}
+
+
+/* =========================
+   MAP
+========================= */
+
+#map{
+
+    width:100%;
+
+    height:400px;
+
+    border-radius:14px;
+
+    margin-top:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px rgba(30,64,175,.14);
+
+    border:
+        2px solid rgba(255,255,255,.8);
+
+    animation:
+        mapEntrance 1s ease-out;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:0 auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:white;
+
+    padding:10px 30px;
+
+    border-radius:25px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    box-shadow:
+        0 8px 18px rgba(30,90,168,.20);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.back:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #174783,
+            #1d4ed8
+        );
+
+    transform:
+        translateY(-3px)
+        scale(1.03);
+
+    box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+}
+
+
+/* =========================
+   LEAFLET POPUP
+========================= */
+
+.leaflet-popup-content-wrapper{
+
+    border-radius:12px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.15);
+}
+
+.leaflet-popup-content{
+
+    color:#334155;
+
+    font-family:
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes pageEntrance{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+
+@keyframes headerEntrance{
+
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+@keyframes tableEntrance{
+
+    from{
+        opacity:0;
+        transform:scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+
+@keyframes mapEntrance{
+
+    from{
+        opacity:0;
+        transform:scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+
+@keyframes floatOne{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(40px,25px);
+    }
+
+}
+
+
+@keyframes floatTwo{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-35px,-25px);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .container{
+        padding:15px;
+    }
+
+    header h1{
+        font-size:1.3rem;
+    }
+
+    .card{
+        padding:15px;
+
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    #map{
+        height:320px;
+    }
+
+    .back{
+        width:auto;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Incident Location Report Dashboard</h1>
+        <button class="back" onclick="location.href='dashboard.html'">
+            Back to Dashboard
+        </button>
+    </header>
+
+<!-- Active Guards Table -->
+    <div class="card">
+        <h2>Active Incident Location Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Post</th>
+                    <th>Shift</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody id="activeGuardsTable"></tbody>
+        </table>
+    </div>
+
+    <!-- Map of On-Duty Guards -->
+    <div class="card">
+        <h2>Map of Incident Report</h2>
+        <div id="map"></div>
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Load guards
+let guards = JSON.parse(localStorage.getItem("guardsData")) || [];
+
+// ==========================
+// Active Guards Table
+// ==========================
+function renderActiveGuards(){
+    const table = document.getElementById("activeGuardsTable");
+    table.innerHTML = "";
+    let activeGuards = guards.filter(g=>g.checkedIn);
+    if(activeGuards.length===0){
+        table.innerHTML = `<tr><td colspan="5" style="text-align:center;">No guards currently on duty.</td></tr>`;
+        return;
+    }
+    activeGuards.forEach(g=>{
+        table.innerHTML += `<tr>
+        <td>${g.name}</td>
+        <td>${g.post}</td>
+        <td>${g.shift}</td>
+        <td>On Duty</td>
+        <td><a href="https://www.google.com/maps?q=${g.location.lat||g.location[0]},${g.location.lng||g.location[1]}" target="_blank" class="map-link">View Map</a></td>
+        </tr>`;
+    });
+}
+
+// ==========================
+// Map of On-Duty Guards
+// ==========================
+let map = L.map("map").setView([6.0582, 121.0003], 16);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+let markers=[];
+
+function renderGuardMarkers(){
+    markers.forEach(m=>map.removeLayer(m));
+    markers=[];
+    let activeGuards = guards.filter(g=>g.checkedIn);
+    activeGuards.forEach(g=>{
+        let loc=g.location;
+        if(loc.lat===undefined) loc={lat:loc[0],lng:loc[1]};
+        let marker = L.marker([loc.lat,loc.lng]).addTo(map);
+        marker.bindPopup(`<b>${g.name}</b><br>Post: ${g.post}<br>Shift: ${g.shift}<br>Status: On Duty`);
+        markers.push(marker);
+    });
+    if(activeGuards.length>0){
+        let group=L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.3));
+    }
+}
+
+// ==========================
+// Auto Refresh Everything
+// ==========================
+setInterval(()=>{
+    guards = JSON.parse(localStorage.getItem("guardsData")) || [];
+    renderActiveGuards();
+    renderGuardMarkers();
+},2000);
+
+// Initial render
+renderActiveGuards();
+renderGuardMarkers();
+
+</script>
+
+</body>
+</html>

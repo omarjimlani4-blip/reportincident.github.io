@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift & Scheduling</title>
+
+<style>
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    font-family:"Segoe UI",sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #e0f2fe,
+            #eef2ff
+        );
+
+    color:#334155;
+
+    overflow-x:hidden;
+
+    min-height:100vh;
+
+    position:relative;
+}
+
+
+/* Animated background */
+
+body::before,
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+body::before{
+
+    width:380px;
+
+    height:380px;
+
+    background:
+        rgba(37,99,235,.10);
+
+    top:-150px;
+
+    left:-120px;
+
+    animation:
+        floatOne 8s ease-in-out infinite;
+}
+
+body::after{
+
+    width:430px;
+
+    height:430px;
+
+    background:
+        rgba(14,165,233,.09);
+
+    right:-150px;
+
+    bottom:-170px;
+
+    animation:
+        floatTwo 10s ease-in-out infinite;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    position:relative;
+
+    padding:20px;
+
+    animation:
+        headerEntrance .8s ease-out;
+}
+
+header h1{
+
+    color:#173b6c;
+
+    font-size:1.8rem;
+
+    margin:10px 0 20px;
+
+    animation:
+        glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+    from{
+        text-shadow:
+            0 0 5px rgba(37,99,235,.15);
+    }
+
+    to{
+        text-shadow:
+            0 0 22px rgba(37,99,235,.35);
+    }
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:0 20px 20px;
+
+    animation:
+        pageEntrance .8s ease-out;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+
+    background:
+        rgba(255,255,255,.90);
+
+    backdrop-filter:
+        blur(14px);
+
+    padding:22px;
+
+    border-radius:18px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 15px 40px rgba(30,64,175,.12),
+        0 4px 12px rgba(0,0,0,.05);
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    animation:
+        slideUp .7s ease forwards;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.card:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(30,64,175,.16);
+}
+
+.card h2{
+
+    color:#173b6c;
+
+    margin-top:0;
+
+    margin-bottom:18px;
+}
+
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+input,
+select,
+button{
+
+    padding:12px;
+
+    border-radius:9px;
+
+    border:1px solid #dbe3ef;
+
+    font-size:1rem;
+
+    font-family:
+        "Segoe UI",
+        sans-serif;
+}
+
+input,
+select{
+
+    background:#fff;
+
+    color:#334155;
+
+    outline:none;
+
+    transition:
+        border .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+input{
+
+    width:100%;
+}
+
+select{
+
+    width:100%;
+
+    cursor:pointer;
+}
+
+input:focus,
+select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.12);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================
+   GENERAL BUTTON
+========================= */
+
+button{
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+button:hover{
+
+    transform:
+        translateY(-2px)
+        scale(1.02);
+}
+
+
+/* =========================
+   ASSIGN BUTTON
+========================= */
+
+.card > button{
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:#fff;
+
+    padding:11px 22px;
+
+    border:none;
+
+    box-shadow:
+        0 8px 18px rgba(30,90,168,.20);
+}
+
+.card > button:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #174783,
+            #1d4ed8
+        );
+
+    box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:#fff;
+
+    padding:10px 20px;
+
+    border:none;
+
+    border-radius:25px;
+
+    box-shadow:
+        0 8px 18px rgba(30,90,168,.20);
+}
+
+.back:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #174783,
+            #1d4ed8
+        );
+
+    box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:10px;
+
+    background:
+        rgba(255,255,255,.78);
+
+    backdrop-filter:
+        blur(10px);
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 25px rgba(30,64,175,.08);
+
+    animation:
+        tableEntrance .8s ease-out;
+}
+
+
+/* Table header */
+
+th{
+
+    padding:14px;
+
+    text-align:left;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173b6c,
+            #1e5aa8
+        );
+
+    color:#fff;
+
+    font-size:.9rem;
+}
+
+
+/* Table cells */
+
+td{
+
+    padding:13px;
+
+    text-align:left;
+
+    color:#334155;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background:
+        rgba(255,255,255,.72);
+
+    transition:
+        background .25s ease;
+}
+
+
+/* Row hover */
+
+tr:hover td{
+
+    background:#eff6ff;
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #dc2626,
+            #ef4444
+        );
+
+    color:#fff;
+
+    border:none;
+
+    padding:7px 13px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 12px rgba(220,38,38,.15);
+}
+
+.delete-btn:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #dc2626
+        );
+
+    box-shadow:
+        0 8px 16px rgba(220,38,38,.22);
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes pageEntrance{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+@keyframes headerEntrance{
+
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+@keyframes slideUp{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+@keyframes tableEntrance{
+
+    from{
+        opacity:0;
+        transform:scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+@keyframes floatOne{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(40px,25px);
+    }
+
+}
+
+@keyframes floatTwo{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-35px,-25px);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    header{
+
+        padding:15px;
+
+        padding-top:70px;
+    }
+
+    header h1{
+
+        font-size:1.35rem;
+    }
+
+    .back{
+
+        top:15px;
+
+        right:15px;
+
+        padding:8px 15px;
+
+        font-size:.85rem;
+    }
+
+    .container{
+
+        padding:0 15px 20px;
+    }
+
+    .card{
+
+        padding:15px;
+
+        overflow-x:auto;
+    }
+
+    table{
+
+        min-width:650px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>Responder's & Shift Scheduling</h1>
+
+    <button class="back" onclick="location.href='dashboard.html'">
+        Back to Dashboard
+    </button>
+
+</header>
+
+<div class="container">
+
+    <!-- ASSIGN SHIFT -->
+    <div class="card">
+
+        <h2>Assign Responder's to Shift</h2>
+
+        <select id="guardSelect">
+            <option value="">Select Responder's</option>
+        </select>
+
+        <br><br>
+
+        <input id="post" placeholder="Assigned Post">
+
+        <br><br>
+
+        <select id="shift">
+
+            <option value="">Select Shift</option>
+
+            <option value="Day Shift">
+                Day Shift (6:00 AM - 6:00 PM)
+            </option>
+
+            <option value="Night Shift">
+                Night Shift (6:00 PM - 6:00 AM)
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <button onclick="assignShift()">
+            Assign Shift
+        </button>
+
+    </div>
+
+
+    <!-- SHIFT TABLE -->
+
+    <div class="card">
+
+        <h2>Scheduled Shifts</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Responder's Name</th>
+
+                    <th>Post</th>
+
+                    <th>Shift</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="scheduleTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// Load guards from Manage Guards localStorage
+let guards = JSON.parse(localStorage.getItem("guardsData")) || [];
+let schedules = JSON.parse(localStorage.getItem("schedulesData")) || [];
+
+// Populate guard dropdown
+const guardSelect = document.getElementById("guardSelect");
+
+function loadGuardOptions(){
+
+    guardSelect.innerHTML =
+        '<option value="">Select Responder</option>';
+
+    guards.forEach((g,index)=>{
+
+        guardSelect.innerHTML +=
+            `<option value="${index}">${g.name}</option>`;
+
+    });
+
+}
+
+loadGuardOptions();
+
+
+// Assign shift
+function assignShift(){
+
+    const guardIndex = guardSelect.value;
+
+    const post =
+        document.getElementById("post").value;
+
+    const shift =
+        document.getElementById("shift").value;
+
+    if(
+        guardIndex === "" ||
+        post === "" ||
+        shift === ""
+    ){
+
+        alert("Please fill all fields.");
+
+        return;
+    }
+
+    const guard = guards[guardIndex];
+
+    // Check if guard already has a shift
+    const existing =
+        schedules.findIndex(
+            s => s.guardName === guard.name
+        );
+
+    if(existing !== -1){
+
+        schedules[existing] = {
+            guardName: guard.name,
+            post,
+            shift
+        };
+
+    }else{
+
+        schedules.push({
+            guardName: guard.name,
+            post,
+            shift
+        });
+
+    }
+
+    localStorage.setItem(
+        "schedulesData",
+        JSON.stringify(schedules)
+    );
+
+    renderTable();
+
+    // Clear form
+    guardSelect.value = "";
+
+    document.getElementById("post").value = "";
+
+    document.getElementById("shift").value = "";
+
+}
+
+
+// Render schedule table
+function renderTable(){
+
+    const table =
+        document.getElementById("scheduleTable");
+
+    table.innerHTML = "";
+
+    schedules.forEach((s,index)=>{
+
+        table.innerHTML += `
+            <tr>
+                <td>${s.guardName}</td>
+                <td>${s.post}</td>
+                <td>${s.shift}</td>
+                <td>
+                    <button
+                        class="delete-btn"
+                        onclick="deleteShift(${index})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    });
+
+}
+
+
+// Delete shift
+function deleteShift(index){
+
+    if(
+        confirm(
+            "Are you sure to delete this schedule?"
+        )
+    ){
+
+        schedules.splice(index,1);
+
+        localStorage.setItem(
+            "schedulesData",
+            JSON.stringify(schedules)
+        );
+
+        renderTable();
+
+    }
+
+}
+
+
+// Initial render
+renderTable();
+
+</script>
+
+</body>
+</html>

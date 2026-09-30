@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pag Mamatyag Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dbeafe,#e0f2fe,#eef2ff);
+    color:#334155;
+    display:flex;
+    transition:all 0.3s;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:250px;
+
+    background:linear-gradient(
+        180deg,
+        #173b6c,
+        #1e5aa8,
+        #2563eb
+    );
+
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:20px;
+
+    transition:
+        width 0.35s ease,
+        box-shadow 0.35s ease;
+
+    overflow:hidden;
+
+    box-shadow:
+        8px 0 30px rgba(30,64,175,.20);
+
+    position:sticky;
+    top:0;
+
+    z-index:10;
+}
+
+.sidebar.collapsed{
+    width:60px;
+}
+
+.sidebar h2{
+    color:#fff;
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+    text-shadow:
+        0 0 12px rgba(255,255,255,.35);
+
+    font-size:1.2rem;
+
+    white-space:nowrap;
+
+    animation:
+        sidebarTitle .8s ease-out;
+}
+
+.sidebar.collapsed h2{
+    font-size:0;
+}
+
+.sidebar a{
+    color:#e0f2fe;
+
+    text-decoration:none;
+
+    padding:12px;
+
+    margin:5px 0;
+
+    display:block;
+
+    border-radius:10px;
+
+    transition:
+        background .3s ease,
+        color .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+
+    white-space:nowrap;
+}
+
+.sidebar.collapsed a{
+    text-align:center;
+    font-size:0;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,.18);
+
+    color:#fff;
+
+    transform:translateX(5px);
+
+    box-shadow:
+        0 6px 15px rgba(0,0,0,.12);
+}
+
+
+/* =========================
+   TOGGLE BUTTON
+========================= */
+
+.toggle-btn{
+    background:#fff;
+
+    color:#1e5aa8;
+
+    border:none;
+
+    padding:10px;
+
+    margin-bottom:20px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+.toggle-btn:hover{
+    background:#e0f2fe;
+
+    transform:scale(1.06);
+
+    box-shadow:
+        0 8px 18px rgba(0,0,0,.15);
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main{
+    flex:1;
+
+    padding:20px;
+
+    overflow-y:auto;
+
+    transition:all 0.3s;
+
+    animation:
+        mainEntrance .8s ease-out;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    color:#173b6c;
+
+    text-align:center;
+
+    font-size:1.8rem;
+
+    margin-bottom:15px;
+
+    animation:
+        headerEntrance .8s ease-out,
+        glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+    from{
+        text-shadow:
+        0 0 5px rgba(37,99,235,.15);
+    }
+
+    to{
+        text-shadow:
+        0 0 20px rgba(37,99,235,.35);
+    }
+
+}
+
+
+/* =========================
+   FOOTER HEADER
+========================= */
+
+.footer{
+    text-align:center;
+
+    margin-bottom:25px;
+
+    color:#64748b;
+
+    animation:
+        fadeUp .8s ease-out .2s forwards;
+
+    opacity:0;
+}
+
+
+/* =========================
+   IMAGE SLIDER
+========================= */
+
+.image-slider{
+    width:100%;
+
+    height:480px;
+
+    overflow:hidden;
+
+    margin-bottom:20px;
+
+    position:relative;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 15px 40px rgba(30,64,175,.18);
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    animation:
+        imageEntrance 1s ease-out .2s forwards;
+
+    opacity:0;
+}
+
+.image-slider img{
+    width:100%;
+
+    height:100%;
+
+    object-fit:center;
+
+    position:absolute;
+
+    opacity:0;
+
+    transition:
+        opacity 1s ease-in-out,
+        transform 5s ease;
+
+}
+
+
+/* =========================
+   STATS CARDS
+========================= */
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(200px,1fr));
+
+    gap:20px;
+}
+
+.card{
+    background:
+        rgba(255,255,255,.88);
+
+    backdrop-filter:blur(12px);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease;
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    box-shadow:
+        0 10px 30px rgba(30,64,175,.10);
+
+    animation:
+        cardEntrance .7s ease-out forwards;
+}
+
+.card:nth-child(1){
+    animation-delay:.2s;
+}
+
+.card:nth-child(2){
+    animation-delay:.35s;
+}
+
+.card:nth-child(3){
+    animation-delay:.5s;
+}
+
+.card:hover{
+    transform:
+        translateY(-8px)
+        scale(1.03);
+
+    box-shadow:
+        0 18px 40px rgba(30,64,175,.18);
+}
+
+.card h3{
+    margin-bottom:10px;
+
+    color:#1e5aa8;
+}
+
+.card p{
+    font-size:1.5rem;
+
+    font-weight:bold;
+
+    color:#173b6c;
+
+    animation:
+        numberPulse 2s ease-in-out infinite;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    font-size:12px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    margin-top:25px;
+
+    padding-bottom:15px;
+}
+
+
+/* =========================
+   COLLAPSED MAIN
+========================= */
+
+body.collapsed .main{
+    margin-left:0;
+}
+
+
+/* =========================
+   OFFICE LOGO
+========================= */
+
+.mau {
+    width:50%;
+
+    border-radius:60px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.20);
+
+    transition:
+        transform .4s ease,
+        box-shadow .4s ease;
+}
+
+.mau:hover{
+    transform:
+        rotate(5deg)
+        scale(1.05);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.25);
+}
+
+
+hr {
+    width:190px;
+
+    border:none;
+
+    border-top:
+        1px solid rgba(255,255,255,.35);
+
+    margin-top:10px;
+}
+
+.dev {
+    margin-top:15px;
+
+    text-align:center;
+
+    color:#e0f2fe;
+}
+
+.mau-name {
+    font-size:10px;
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout {
+    float:right;
+
+    margin-top:-50px;
+
+    width:100px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:white;
+
+    padding:7px;
+
+    border:none;
+
+    border-radius:70px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    box-shadow:
+        0 7px 18px rgba(30,90,168,.20);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.logout:hover{
+    background:
+        linear-gradient(
+            135deg,
+            #174783,
+            #1d4ed8
+        );
+
+    transform:
+        translateY(-3px)
+        scale(1.04);
+
+    box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes mainEntrance{
+
+    from{
+        opacity:0;
+        transform:translateX(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+
+@keyframes sidebarTitle{
+
+    from{
+        opacity:0;
+        transform:translateY(-15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+@keyframes headerEntrance{
+
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+@keyframes imageEntrance{
+
+    from{
+        opacity:0;
+        transform:scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+
+@keyframes cardEntrance{
+
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+@keyframes numberPulse{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.04);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    body{
+        display:block;
+    }
+
+    .sidebar{
+        width:100%;
+        height:auto;
+
+        position:relative;
+
+        padding:12px;
+    }
+
+    .sidebar.collapsed{
+        width:100%;
+        height:65px;
+    }
+
+    .sidebar h2{
+        margin-bottom:10px;
+    }
+
+    .sidebar a{
+        margin:3px 0;
+    }
+
+    .sidebar.collapsed a,
+    .sidebar.collapsed .dev{
+        display:none;
+    }
+
+    .main{
+        padding:15px;
+    }
+
+    .header{
+        font-size:1.3rem;
+        margin-top:5px;
+    }
+
+    .footer{
+        font-size:11px;
+    }
+
+    .image-slider{
+        height:280px;
+    }
+
+    .logout{
+        float:none;
+        margin:10px auto 15px auto;
+        display:block;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <h2>Main Dashboard</h2>
+    <a href="reportcenter.html">Report Center</a>
+    <a href="incidentLocation.html">Incident Location</a>
+    <a href="incidentrecord.html">Incident Record</a>
+    <a href="summaryReports.html">Summary Reports</a>
+    <a href="shiftschedule.html">Responder/Schedule</a>
+    <a href="../index.html">Logout</a>
+    <div class="dev">
+      <img class="mau" src="Bus-Bus.jpeg">
+      <p class="mau-name">Office Of The Barangay<br>Bus-Bus Jolo, Sulu</p> <hr>
+      <p style="font-size:12px;">Responders</p>
+    </div>
+</div>
+<!--  MAin Items  -->
+<div class="main">
+    <div class="header">PAG MAMATYAG DASHBOARD</div>
+    <div class="footer">Barangay Bus-Bus Report Center</div>
+    <button class="logout" onclick="location.href='../index.html'">Logout</button>
+    <!-- Rotating image -->
+    <div class="image-slider">
+        <img src="f1.jpg" alt="slider">
+        <!--<img src="f3.jpg" alt="slider">-->
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+        <!--<div class="card">
+            <h3>Active Guards</h3>
+            <p>25</p>
+        </div>-->
+        <div class="card">
+            <h3>Incidents Today</h3>
+            <p>3</p>
+        </div>
+        <div class="card">
+            <h3>Shifts Completed</h3>
+            <p>18</p>
+        </div>
+        <div class="card">
+            <h3>Alerts Pending</h3>
+            <p>5</p>
+        </div>
+    </div>
+
+<footer>Copyright © DJZtech, 1127-2025</footer>
+</div>
+
+
+<script>
+// Rotating Images Logic
+let slides = document.querySelectorAll('.image-slider img');
+let current = 0;
+slides[current].style.opacity = 1;
+
+setInterval(()=>{
+    slides[current].style.opacity = 0;
+    current = (current+1)%slides.length;
+    slides[current].style.opacity = 1;
+},5000);
+
+// Sidebar toggle
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('collapsed');
+    document.body.classList.toggle('collapsed');
+}
+</script>
+
+</body>
+</html>

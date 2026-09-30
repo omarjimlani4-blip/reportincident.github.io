@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incident Record</title>
+
+<style>
+
+/* =========================
+   MAIN PAGE
+========================= */
+
+body {
+    margin:0;
+
+    font-family:"Segoe UI",sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #e0f2fe,
+            #eef2ff
+        );
+
+    color:#334155;
+
+    overflow-x:hidden;
+
+    min-height:100vh;
+
+    position:relative;
+}
+
+
+/* Animated background circles */
+
+body::before,
+body::after {
+    content:"";
+
+    position:fixed;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:-1;
+}
+
+body::before {
+    width:360px;
+    height:360px;
+
+    background:rgba(37,99,235,.12);
+
+    top:-130px;
+    left:-110px;
+
+    animation:
+        floatOne 8s ease-in-out infinite;
+}
+
+body::after {
+    width:420px;
+    height:420px;
+
+    background:rgba(14,165,233,.10);
+
+    bottom:-170px;
+    right:-130px;
+
+    animation:
+        floatTwo 10s ease-in-out infinite;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:20px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    text-align:center;
+
+    margin-bottom:20px;
+
+    animation:
+        headerEntrance .8s ease-out;
+}
+
+header h1{
+
+    font-size:1.6rem;
+
+    color:#173b6c;
+
+    animation:
+        glow 2s infinite alternate;
+}
+
+@keyframes glow{
+
+    from{
+        text-shadow:
+            0 0 5px rgba(37,99,235,.15);
+    }
+
+    to{
+        text-shadow:
+            0 0 20px rgba(37,99,235,.35);
+    }
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+
+    background:
+        rgba(255,255,255,.90);
+
+    backdrop-filter:
+        blur(14px);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 15px 40px rgba(30,64,175,.12),
+        0 4px 12px rgba(0,0,0,.05);
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    animation:
+        slideUp .7s ease forwards;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.card:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 20px 45px rgba(30,64,175,.16);
+}
+
+.card h2{
+
+    color:#173b6c;
+
+    margin-top:0;
+
+    margin-bottom:18px;
+}
+
+
+/* =========================
+   CARD ANIMATION
+========================= */
+
+@keyframes slideUp{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+input,
+textarea,
+select,
+button{
+
+    padding:12px;
+
+    border-radius:9px;
+
+    border:none;
+
+    font-size:1rem;
+}
+
+
+/* Input */
+
+input,
+textarea,
+select{
+
+    background:#f8fafc;
+
+    color:#1e293b;
+
+    border:
+        1px solid #d1d5db;
+
+    outline:none;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease,
+        background .25s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    border-color:#2563eb;
+
+    background:#fff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.10),
+        0 6px 15px rgba(37,99,235,.10);
+}
+
+textarea{
+
+    resize:vertical;
+}
+
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
+button{
+
+    cursor:pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+button:not(.back):not(.delete-btn){
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:#fff;
+
+    box-shadow:
+        0 7px 16px rgba(30,90,168,.20);
+}
+
+button:not(.back):not(.delete-btn):hover{
+
+    transform:
+        translateY(-3px)
+        scale(1.03);
+
+    box-shadow:
+        0 12px 24px rgba(30,90,168,.28);
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:10px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    backdrop-filter:
+        blur(10px);
+
+    border-radius:14px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 25px rgba(30,64,175,.08);
+
+    animation:
+        tableEntrance .8s ease-out;
+}
+
+
+/* Table header */
+
+th{
+
+    padding:14px;
+
+    text-align:left;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173b6c,
+            #1e5aa8
+        );
+
+    color:#fff;
+
+    font-size:.9rem;
+}
+
+
+/* Table data */
+
+td{
+
+    padding:13px;
+
+    text-align:left;
+
+    color:#334155;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background:
+        rgba(255,255,255,.72);
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+
+/* Row hover */
+
+tr:hover td{
+
+    background:
+        #eff6ff;
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #c62828,
+            #ef4444
+        );
+
+    color:#fff;
+
+    border:none;
+
+    padding:7px 13px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 5px 12px rgba(211,47,47,.18);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.delete-btn:hover{
+
+    transform:
+        translateY(-2px)
+        scale(1.04);
+
+    box-shadow:
+        0 8px 18px rgba(211,47,47,.25);
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back {
+
+    float:right;
+
+    margin-top:-40px;
+
+    margin-right:180px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e5aa8,
+            #2563eb
+        );
+
+    color:#fff;
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 8px 18px rgba(30,90,168,.20);
+
+    cursor:pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.back:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #174783,
+            #1d4ed8
+        );
+
+    color:#fff;
+
+    transform:
+        translateY(-3px)
+        scale(1.03);
+
+    box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+}
+
+
+/* =========================
+   TABLE ANIMATION
+========================= */
+
+@keyframes tableEntrance{
+
+    from{
+        opacity:0;
+        transform:scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+
+/* =========================
+   BACKGROUND ANIMATION
+========================= */
+
+@keyframes floatOne{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(40px,25px);
+    }
+
+}
+
+@keyframes floatTwo{
+
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(-35px,-25px);
+    }
+
+}
+
+
+/* =========================
+   HEADER ANIMATION
+========================= */
+
+@keyframes headerEntrance{
+
+    from{
+        opacity:0;
+        transform:translateY(-20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .container{
+        padding:15px;
+    }
+
+    header h1{
+        font-size:1.35rem;
+    }
+
+    .back{
+
+        float:none;
+
+        margin:
+            0 auto 15px auto;
+
+        display:block;
+    }
+
+    .card{
+        padding:15px;
+
+        overflow-x:auto;
+    }
+
+    table{
+
+        min-width:800px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Incident Records</h1>
+    <button class="back" onclick="location.href='dashboard.html'">Back to Dashboard</button>
+</header>
+
+<div class="container">
+
+    <!-- ADD INCIDENT (for testing/demo) -->
+    <div class="card">
+        <h2>Save Incident Records</h2>
+        <select id="guardSelect">
+            <option value="">Select Responder</option>
+        </select><br><br>
+        <input type="text" id="post" placeholder="Location"><br><br>
+        <textarea id="incidentDetail" rows="4" placeholder="Incident Details"></textarea><br><br>
+        <button onclick="addIncident()">Save Incident</button>
+    </div>
+
+    <!-- INCIDENT TABLE -->
+    <div class="card">
+        <h2>Incident Saved</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Responder's Name</th>
+                    <th>Location</th>
+                    <th>Date / Time</th>
+                    <th>Details</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="incidentTable"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+// Load guards and incidents
+let guards = JSON.parse(localStorage.getItem("guardsData")) || [];
+let incidents = JSON.parse(localStorage.getItem("incidentsData")) || [];
+
+// Populate guard dropdown
+const guardSelect = document.getElementById("guardSelect");
+function loadGuards(){
+    guardSelect.innerHTML = '<option value="">Responder Name</option>';
+    guards.forEach((g,index)=>{
+        guardSelect.innerHTML += `<option value="${index}">${g.name}</option>`;
+    });
+}
+loadGuards();
+
+// Add incident
+function addIncident(){
+    const guardIndex = guardSelect.value;
+    const post = document.getElementById("post").value;
+    const detail = document.getElementById("incidentDetail").value;
+
+    if(guardIndex === "" || post === "" || detail === ""){
+        alert("Please fill all fields.");
+        return;
+    }
+
+    const guard = guards[guardIndex];
+    const now = new Date();
+    incidents.push({
+        guardName: guard.name,
+        post,
+        dateTime: now.toLocaleString(),
+        detail
+    });
+
+    localStorage.setItem("incidentsData", JSON.stringify(incidents));
+    renderTable();
+
+    // Clear form
+    guardSelect.value = "";
+    document.getElementById("post").value = "";
+    document.getElementById("incidentDetail").value = "";
+}
+
+// Render table
+function renderTable(){
+    const table = document.getElementById("incidentTable");
+    table.innerHTML = "";
+    incidents.forEach((i,index)=>{
+        table.innerHTML += `
+            <tr>
+                <td>${i.guardName}</td>
+                <td>${i.post}</td>
+                <td>${i.dateTime}</td>
+                <td>${i.detail}</td>
+                <td><button class="delete-btn" onclick="deleteIncident(${index})">Delete</button></td>
+            </tr>
+        `;
+    });
+}
+
+// Delete incident
+function deleteIncident(index){
+    if(confirm("Are you sure to delete this report?")){
+        incidents.splice(index,1);
+        localStorage.setItem("incidentsData", JSON.stringify(incidents));
+        renderTable();
+    }
+}
+
+// Initial render
+renderTable();
+</script>
+
+</body>
+</html>
