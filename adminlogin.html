@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+
+  <style>
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg,#dbeafe,#e0f2fe,#eef2ff);
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+
+    /* =========================
+       ANIMATED BACKGROUND
+    ========================= */
+
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    body::before {
+      width: 350px;
+      height: 350px;
+      background: rgba(37,99,235,.13);
+      top: -120px;
+      left: -100px;
+      animation: floatOne 8s ease-in-out infinite;
+    }
+
+    body::after {
+      width: 400px;
+      height: 400px;
+      background: rgba(14,165,233,.10);
+      bottom: -170px;
+      right: -120px;
+      animation: floatTwo 10s ease-in-out infinite;
+    }
+
+
+    /* =========================
+       LOGIN BOX
+    ========================= */
+
+    .login-box {
+      position: relative;
+      z-index: 2;
+
+      width: 250px;
+
+      background: rgba(255,255,255,.94);
+
+      padding: 30px;
+
+      border-radius: 22px;
+
+      box-shadow:
+        0 25px 60px rgba(30,64,175,.18),
+        0 8px 20px rgba(0,0,0,.08);
+
+      text-align: center;
+
+      border: 1px solid rgba(255,255,255,.8);
+
+      backdrop-filter: blur(12px);
+
+      animation:
+        boxEntrance .9s cubic-bezier(.17,.84,.44,1) forwards;
+
+      opacity: 0;
+      transform: translateY(35px) scale(.92);
+    }
+
+
+    /* Small decorative glow */
+
+    .login-box::before {
+      content: "";
+      position: absolute;
+
+      width: 90px;
+      height: 90px;
+
+      border-radius: 50%;
+
+      background: rgba(59,130,246,.12);
+
+      top: -35px;
+      right: -35px;
+
+      z-index: -1;
+    }
+
+
+    /* =========================
+       LOGO
+    ========================= */
+
+    img {
+      width: 70px;
+
+      filter:
+        drop-shadow(0 8px 12px rgba(30,90,168,.18));
+
+      animation:
+        logoEntrance 1s ease-out .3s forwards,
+        logoFloat 4s ease-in-out 1.3s infinite;
+
+      opacity: 0;
+    }
+
+
+    /* =========================
+       TITLE
+    ========================= */
+
+    h2{
+      color: #173b6c;
+
+      margin: 0;
+      margin-bottom: 20px;
+
+      font-size: 22px;
+
+      animation:
+        fadeDown .7s ease-out .5s forwards;
+
+      opacity: 0;
+    }
+
+
+    /* =========================
+       INPUT
+    ========================= */
+
+    input {
+      box-sizing: border-box;
+
+      display: block;
+
+      width: 91%;
+
+      margin: 10px 0;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      border: 1px solid #d1d5db;
+
+      background: #f8fafc;
+
+      color: #1e293b;
+
+      outline: none;
+
+      transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease,
+        background .25s ease;
+
+      animation:
+        inputEntrance .7s ease-out .7s forwards;
+
+      opacity: 0;
+    }
+
+
+    input:focus {
+      border-color: #2563eb;
+
+      background: #fff;
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 0 0 3px rgba(37,99,235,.10),
+        0 6px 15px rgba(37,99,235,.10);
+    }
+
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    button {
+      width: 102%;
+
+      padding: 11px 20px;
+
+      background:
+        linear-gradient(135deg,#1e5aa8,#2563eb);
+
+      color: white;
+
+      border: none;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      font-weight: 600;
+
+      box-shadow:
+        0 8px 18px rgba(30,90,168,.22);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+
+      animation:
+        buttonEntrance .7s ease-out .9s forwards;
+
+      opacity: 0;
+    }
+
+
+    button:hover {
+      background:
+        linear-gradient(135deg,#174783,#1d4ed8);
+
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 12px 25px rgba(30,90,168,.30);
+    }
+
+
+    button:active {
+      transform: scale(.97);
+    }
+
+
+    /* =========================
+       DESCRIPTION
+    ========================= */
+
+    p{
+      color: #64748b;
+
+      font-size: 13px;
+
+      margin-top: 18px;
+
+      animation:
+        fadeUp .7s ease-out 1s forwards;
+
+      opacity: 0;
+    }
+
+
+    /* =========================
+       ANIMATIONS
+    ========================= */
+
+    @keyframes boxEntrance {
+
+      0% {
+        opacity: 0;
+        transform: translateY(35px) scale(.92);
+      }
+
+      60% {
+        opacity: 1;
+        transform: translateY(-5px) scale(1.01);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+    }
+
+
+    @keyframes logoEntrance {
+
+      0% {
+        opacity: 0;
+        transform: scale(.5) rotate(-15deg);
+      }
+
+      70% {
+        opacity: 1;
+        transform: scale(1.08) rotate(3deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+
+    }
+
+
+    @keyframes logoFloat {
+
+      0%,100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+
+    }
+
+
+    @keyframes fadeDown {
+
+      from {
+        opacity: 0;
+        transform: translateY(-15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    @keyframes fadeUp {
+
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    @keyframes inputEntrance {
+
+      from {
+        opacity: 0;
+        transform: translateX(-15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+    }
+
+
+    @keyframes buttonEntrance {
+
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    @keyframes floatOne {
+
+      0%,100% {
+        transform: translate(0,0);
+      }
+
+      50% {
+        transform: translate(40px,25px);
+      }
+
+    }
+
+
+    @keyframes floatTwo {
+
+      0%,100% {
+        transform: translate(0,0);
+      }
+
+      50% {
+        transform: translate(-35px,-25px);
+      }
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media(max-width:480px) {
+
+      .login-box {
+        width: 250px;
+        max-width: 75%;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <img src="ssc.png">
+    <h2>Login as Admin</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p>Enter the admin Pass</p>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      // Example only: static credentials (can be improved with localStorage or backend)
+      if (username === "admin" && password === "1234") {
+        // Redirect to admin.html
+        window.location.href = "../system/dashboard.html";
+      } else {
+        alert("Invalid credentials. Pamaid naa kaw ha Admin.");
+      }
+    }
+  </script>
+
+</body>
+</html>

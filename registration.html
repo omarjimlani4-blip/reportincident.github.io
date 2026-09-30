@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Stalwart — Register</title>
+
+<style>
+/* Center the page content */
+body.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe, #dbeafe, #eef2ff);
+  margin-top: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated background */
+body.page-center::before,
+body.page-center::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+body.page-center::before {
+  width: 280px;
+  height: 280px;
+  background: rgba(30, 90, 168, 0.16);
+  top: -80px;
+  left: -70px;
+  animation: floatCircle 7s ease-in-out infinite;
+}
+
+body.page-center::after {
+  width: 330px;
+  height: 330px;
+  background: rgba(59, 130, 246, 0.13);
+  bottom: -120px;
+  right: -90px;
+  animation: floatCircle2 9s ease-in-out infinite;
+}
+
+/* Modal Card */
+.modal-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255,255,255,0.94);
+  padding: 32px 28px;
+  border-radius: 24px;
+  box-shadow:
+    0 25px 60px rgba(30, 64, 175, 0.18),
+    0 8px 20px rgba(0,0,0,0.08);
+  width: 280px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px);
+
+  animation: cardEntrance 0.9s cubic-bezier(.17,.84,.44,1) forwards;
+  transform: translateY(40px) scale(.92);
+  opacity: 0;
+}
+
+/* Card top glow */
+.modal-card::before {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(59,130,246,0.12);
+  top: -35px;
+  right: -35px;
+  z-index: -1;
+}
+
+/* Logo */
+.modal-card .logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  object-fit: contain;
+  margin: 0 auto 15px auto;
+  display: block;
+
+  box-shadow: 0 8px 25px rgba(30,90,168,0.22);
+
+  animation:
+    logoEntrance 1s ease-out 0.3s forwards,
+    logoFloat 4s ease-in-out 1.3s infinite;
+
+  opacity: 0;
+}
+
+/* Heading */
+.modal-card h2 {
+  color: #173b6c;
+  margin: 8px 0 22px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  animation: fadeDown .7s ease-out .5s forwards;
+  opacity: 0;
+}
+
+/* Labels */
+.modal-card label {
+  display: block;
+  text-align: left;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  animation: fadeUp .6s ease-out .6s forwards;
+  opacity: 0;
+}
+
+/* Form inputs */
+.modal-card input {
+  box-sizing: border-box;
+  width: 92%;
+  padding: 11px 12px;
+  margin: 6px 0 12px 0;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  outline: none;
+  color: #1e293b;
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease,
+    background .25s ease;
+}
+
+/* Input focus animation */
+.modal-card input:focus {
+  border-color: #2563eb;
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 3px rgba(37,99,235,.10),
+    0 6px 15px rgba(37,99,235,.10);
+}
+
+/* Placeholder */
+.modal-card input::placeholder {
+  color: #94a3b8;
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1e5aa8, #2563eb);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+
+  box-shadow: 0 8px 18px rgba(30,90,168,.22);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    background .25s ease;
+
+  animation: buttonEntrance .7s ease-out .9s forwards;
+  opacity: 0;
+}
+
+/* Button hover */
+.btn:hover {
+  background: linear-gradient(135deg, #174783, #1d4ed8);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(30,90,168,.30);
+}
+
+/* Button click */
+.btn:active {
+  transform: translateY(0) scale(.98);
+}
+
+/* Small text */
+.center {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.center-small {
+    margin: 20px;
+    color: #64748b;
+    font-size: 13px;
+    animation: fadeUp .7s ease-out 1s forwards;
+    opacity: 0;
+}
+
+.center-small a {
+    text-decoration: none;
+    color: #1e5aa8;
+    font-weight: 700;
+    transition: color .25s ease;
+}
+
+.center-small a:hover {
+    color: #174783;
+    text-decoration: underline;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(.92);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.01);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes logoEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(.5) rotate(-15deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatCircle {
+  0%, 100% {
+    transform: translate(0,0);
+  }
+
+  50% {
+    transform: translate(35px,25px);
+  }
+}
+
+@keyframes floatCircle2 {
+  0%, 100% {
+    transform: translate(0,0);
+  }
+
+  50% {
+    transform: translate(-30px,-25px);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  body.page-center {
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .modal-card {
+    width: 100%;
+    max-width: 300px;
+    padding: 28px 22px;
+  }
+}
+
+</style>
+</head>
+
+<body class="page-center">
+
+  <div class="modal-card">
+    <img src="../system/Bus-Bus.jpeg" class="logo" alt="Stalwart Logo">
+    <h2>Create an Account</h2>
+
+    <form id="registerForm">
+
+      <label>Full Name
+        <input id="fullname" required>
+      </label>
+
+      <label>Email
+        <input id="email" required type="email">
+      </label>
+
+      <label>Mobile Number
+        <input id="mobile" required type="tel">
+      </label>
+
+      <label>Username
+        <input id="reg_username" required>
+      </label>
+
+      <label>Password
+        <input id="reg_password" required type="password">
+      </label>
+
+      <button type="submit" class="btn primary">Create Account</button>
+
+      <p class="center-small">
+        Already have an account?<br><br>
+        <a href="userlogin.html">Login instead</a>
+      </p>
+    </form>
+  </div>
+
+<script>
+// REGISTRATION SYSTEM
+document.getElementById("registerForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const user = {
+    fullname: fullname.value.trim(),
+    email: email.value.trim(),
+    mobile: mobile.value.trim(),
+    username: reg_username.value.trim(),
+    password: reg_password.value
+  };
+
+  if (localStorage.getItem("stalwart_user_" + user.username)) {
+    alert("Username already exists.");
+    return;
+  }
+
+  localStorage.setItem("stalwart_user_" + user.username, JSON.stringify(user));
+  alert("Account created successfully!");
+  window.location.href = "userlogin.html";
+});
+</script>
+
+</body>
+</html>
