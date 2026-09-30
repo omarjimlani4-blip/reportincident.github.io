@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stalwart Security Forces</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      background: url("system/f1.jpg");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      color: #fff;
+      animation: fadeIn 2s ease-in;
+    }
+
+    h1 {
+      font-size: 2.8em;
+      margin-bottom: 20px;
+      margin-top: 0px;
+      animation: slideDown 1.5s ease-in-out;
+      text-shadow: 4px 5px 5px black;
+    }
+
+    p {
+      font-size: 2em;
+      margin-bottom: 40px;
+      opacity: 0.9;
+      animation: fadeIn 2s 1s forwards;
+      font-weight: 800;
+      text-shadow: 4px 5px 5px black;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      animation: fadeInUp 2s 1.5s forwards;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border: none;
+      background: lightblue;
+      color: blue;
+      font-weight: bold;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    img {
+      width: 100px;
+      margin-top: 10rem;
+      border-radius: 50px;
+    }
+
+    img:hover {
+      transform: scale(1.35);
+    }
+    
+    
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="system/Bus-Bus.jpeg">
+    <h1>Welcome to <br> Pag Mamatyag Incident Report</h1>
+    <p>Barangay Bus-Bus Jolo, Sulu</p>
+
+    <div class="buttons">
+      <button class="btn" onclick="location.href='authentication/role.html'">Get Started</button>
+    </div>
+  </div>
+
+</body>
+</html>
